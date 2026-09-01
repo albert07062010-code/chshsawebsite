@@ -44,7 +44,6 @@ function fetchCsvData(url, containerId, loadingMsg, onSuccess) {
     Papa.parse(url, {
         download: true,
         header: true,
-        worker: true,
         complete: results => onSuccess(results.data, container),
         error: err => {
             container.innerHTML = `
@@ -149,14 +148,12 @@ function loadRules() {
                         <span class="toggle-icon">+</span>
                     </div>
                     <div class="rule-body">
-                        <div class="rule-body-inner">
-                            <div class="rule-meta">
-                                <span>最後修訂日期：${escapeHTML(rule.updated) || '未知'}</span>
-                            </div>
-                            <div class="rule-content">
-                                ${summaryHTML}
-                                ${linkHTML}
-                            </div>
+                        <div class="rule-meta">
+                            <span>最後修訂日期：${escapeHTML(rule.updated) || '未知'}</span>
+                        </div>
+                        <div class="rule-content">
+                            ${summaryHTML}
+                            ${linkHTML}
                         </div>
                     </div>
                 </div>
@@ -217,12 +214,15 @@ function initTermsModal() {
 
     if (!termsModal) return;
 
+    // 檢查瀏覽器是否已同意
     if (!localStorage.getItem("chshsa_terms_accepted")) {
+        // 設定 2800 毫秒 (2.8秒) 延遲，等預設的白色 Loading 完全消失後再彈出
         setTimeout(() => {
             termsModal.classList.add("active");
         }, 2800);
     }
 
+    // 點擊「同意」
     if (btnAgree) {
         btnAgree.addEventListener("click", () => {
             localStorage.setItem("chshsa_terms_accepted", "true");
@@ -230,6 +230,7 @@ function initTermsModal() {
         });
     }
 
+    // 點擊「不同意」跳轉卡加布列島
     if (btnDisagree) {
         btnDisagree.addEventListener("click", () => {
             window.location.href = "https://www.youtube.com/watch?v=acBsZstdFHw&list=RDacBsZstdFHw&start_radio=1";
@@ -245,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadHistory();
     loadRules();
     loadLinks();
-    initTermsModal(); 
+    initTermsModal(); // 啟動條款視窗檢查
 });
 
 const mobileMenuBtn = document.getElementById('mobile-menu');
@@ -308,9 +309,6 @@ function navigateTo(targetIndex) {
     const activeLink = document.querySelector(`.nav-link[data-index="${targetIndex}"]`);
     if (activeLink) activeLink.classList.add('active');
 
-    currentDoc.style.willChange = 'transform';
-    targetDoc.style.willChange = 'transform';
-
     targetDoc.style.transition = 'none';
     targetDoc.className = `page-section ${direction === 'right' ? 'page-hidden-right' : 'page-hidden-left'}`;
     void targetDoc.offsetWidth; 
@@ -326,9 +324,7 @@ function navigateTo(targetIndex) {
     
     setTimeout(() => {
         isAnimating = false;
-        currentDoc.scrollTop = 0;
-        currentDoc.style.willChange = '';
-        targetDoc.style.willChange = '';
+        currentDoc.scrollTop = 0; 
     }, 600);
 }
 
@@ -383,31 +379,25 @@ function switchRuleTab(category, btnElement) {
 function filterRules() {
     const keyword = document.getElementById('rule-search-input').value.toLowerCase();
     let visibleCount = 0;
-    const cards = document.querySelectorAll('.rule-card');
-
-    const decisions = Array.from(cards).map(card => {
+    
+    document.querySelectorAll('.rule-card').forEach(card => {
         const text = card.textContent.toLowerCase();
         const cardCategory = card.getAttribute('data-category');
         const matchCategory = (currentRuleCategory === 'all' || cardCategory === currentRuleCategory);
         const matchKeyword = text.includes(keyword);
-        return { card, show: matchCategory && matchKeyword };
-    });
-
-    decisions.forEach(({ card, show }) => {
-        card.style.display = show ? 'block' : 'none';
-        if (show) visibleCount++;
+        
+        if (matchCategory && matchKeyword) {
+            card.style.display = 'block';
+            visibleCount++;
+        } else {
+            card.style.display = 'none';
+        }
     });
 
     const noRulesMsg = document.getElementById('no-rules-msg');
     if (noRulesMsg) {
         noRulesMsg.style.display = visibleCount === 0 ? 'block' : 'none';
     }
-}
-
-let filterRulesDebounceTimer = null;
-function filterRulesDebounced() {
-    clearTimeout(filterRulesDebounceTimer);
-    filterRulesDebounceTimer = setTimeout(filterRules, 150);
 }
 
 function toggleRule(headerElement) {
@@ -427,25 +417,16 @@ window.addEventListener('load', () => {
 const backToTopBtn = document.getElementById('back-to-top');
 
 if (backToTopBtn) {
-    let scrollTicking = false;
-    let btnIsShown = false;
-
     pages.forEach(page => {
         page.addEventListener('scroll', function() {
-            if (!this.classList.contains('page-active')) return;
-            if (scrollTicking) return;
-            scrollTicking = true;
-
-            const scrollTop = this.scrollTop;
-            requestAnimationFrame(() => {
-                const shouldShow = scrollTop > 300;
-                if (shouldShow !== btnIsShown) {
-                    backToTopBtn.classList.toggle('show', shouldShow);
-                    btnIsShown = shouldShow;
+            if (this.classList.contains('page-active')) {
+                if (this.scrollTop > 300) {
+                    backToTopBtn.classList.add('show');
+                } else {
+                    backToTopBtn.classList.remove('show');
                 }
-                scrollTicking = false;
-            });
-        }, { passive: true });
+            }
+        });
     });
 
     backToTopBtn.addEventListener('click', () => {
