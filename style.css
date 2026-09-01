@@ -393,8 +393,8 @@ nav a.nav-link.active::after {
 }
 
 .hero-btn.primary-btn {
-    background-color: var(--brand-red);
-    color: var(--white);
+    background-color: #ef4a45;
+    color: #eaeaea;
     box-shadow: 0 4px 15px rgba(226, 74, 69, 0.3);
 }
 
