@@ -12,6 +12,7 @@
 </head>
 <body>
 
+    <!-- 載入動畫 (Preloader) -->
     <div id="preloader">
         <div class="loader-logo">
             <img src="image.png" alt="Loading...">
@@ -19,6 +20,7 @@
         <div class="loader-spinner"></div>
     </div>
 
+    <!-- 頂部導覽列 -->
     <header>
         <div class="brand-logo" onclick="navigateTo(0)">
             <img src="image.png" alt="CHSHSA Logo">
@@ -39,7 +41,7 @@
                 <li><a class="nav-link" data-index="4">組織團隊</a></li>
                 <li><a class="nav-link" data-index="5">會史館</a></li>
                 <li><a class="nav-link" data-index="6">相關連結</a></li>
-                <li><a class="nav-link" href="https://sa.chshsga.org/clubs">社團名冊</a></li>
+                <li><a class="nav-link" href="club.html">社團名冊</a></li>
                 <li><a class="nav-link" data-index="7">聯絡我們</a></li>
             </ul>
         </nav>
@@ -73,7 +75,6 @@
                     <span>01 / News & Events</span>
                     <h2>最新公告</h2>
                 </div>
-                
                 <div class="news-container" id="news-container"></div>
             </div>
             
@@ -223,18 +224,6 @@
                                     <li>當免費勞工</li>
                                 </ul>
                             </div>
-                            <div class="detail-group">
-                                <span class="detail-label">Current / 進行中</span>
-                                <ul class="clean-list progress-list">
-                                    <li class="empty-state">專案進度更新中...</li>
-                                </ul>
-                            </div>
-                            <div class="detail-group">
-                                <span class="detail-label">Achieved / 已完成</span>
-                                <ul class="clean-list done-list">
-                                    <li class="empty-state">尚無資料</li>
-                                </ul>
-                            </div>
                         </div>
                     </div>
 
@@ -250,18 +239,6 @@
                                     <li>製作文宣海報或活動主視覺</li>
                                     <li>製作簡報並廣納攝影人才</li>
                                     <li>在 LOGO 設計、資料排版上需要有一定的能力</li>
-                                </ul>
-                            </div>
-                            <div class="detail-group">
-                                <span class="detail-label">Current / 進行中</span>
-                                <ul class="clean-list progress-list">
-                                    <li class="empty-state">專案進度更新中...</li>
-                                </ul>
-                            </div>
-                            <div class="detail-group">
-                                <span class="detail-label">Achieved / 已完成</span>
-                                <ul class="clean-list done-list">
-                                    <li class="empty-state">尚無資料</li>
                                 </ul>
                             </div>
                         </div>
@@ -282,18 +259,6 @@
                                     <li>推廣並普及學權知識</li>
                                 </ul>
                             </div>
-                            <div class="detail-group">
-                                <span class="detail-label">Current / 進行中</span>
-                                <ul class="clean-list progress-list">
-                                    <li class="empty-state">專案進度更新中...</li>
-                                </ul>
-                            </div>
-                            <div class="detail-group">
-                                <span class="detail-label">Achieved / 已完成</span>
-                                <ul class="clean-list done-list">
-                                    <li class="empty-state">尚無資料</li>
-                                </ul>
-                            </div>
                         </div>
                     </div>
 
@@ -309,18 +274,6 @@
                                     <li>舉辦社團博覽會、社團聯展、園遊會鬼屋等活動</li>
                                     <li>編列社團活動補助費</li>
                                     <li>處理社團評鑑獎勵</li>
-                                </ul>
-                            </div>
-                            <div class="detail-group">
-                                <span class="detail-label">Current / 進行中</span>
-                                <ul class="clean-list progress-list">
-                                    <li class="empty-state">專案進度更新中...</li>
-                                </ul>
-                            </div>
-                            <div class="detail-group">
-                                <span class="detail-label">Achieved / 已完成</span>
-                                <ul class="clean-list done-list">
-                                    <li class="empty-state">尚無資料</li>
                                 </ul>
                             </div>
                         </div>
@@ -339,18 +292,6 @@
                                     <li>編列預算、製作決算表</li>
                                     <li>管理學生會倉庫之所有商品</li>
                                     <li>登記好流水帳及收據等</li>
-                                </ul>
-                            </div>
-                            <div class="detail-group">
-                                <span class="detail-label">Current / 進行中</span>
-                                <ul class="clean-list progress-list">
-                                    <li class="empty-state">專案進度更新中...</li>
-                                </ul>
-                            </div>
-                            <div class="detail-group">
-                                <span class="detail-label">Achieved / 已完成</span>
-                                <ul class="clean-list done-list">
-                                    <li class="empty-state">尚無資料</li>
                                 </ul>
                             </div>
                         </div>
@@ -379,13 +320,11 @@
                 <div class="section-header">
                     <span>05 / History</span>
                     <h2>會史館</h2>
-
                     <div class="history-intro">
                         <p class="history-tittle">承前啟後，歷久彌新。</p>
                         <p>此處登載了第六十屆至今的學生會幹部名冊。</p>
                     </div>                   
                 </div>
-                
                 <div class="history-timeline" id="history-container"></div>
             </div>
 
@@ -411,7 +350,6 @@
                     <span>06 / Related Links</span>
                     <h2>相關連結</h2>
                 </div>
-
                 <div class="links-grid" id="links-container"></div>
             </div>
 
@@ -436,13 +374,11 @@
                 <div class="section-header">
                     <span>07 / Contact Us</span>
                 </div>
-                
                 <div class="contact-layout">
                     <div class="contact-text">
                         <h2>準備好<br>與我們交流了嗎？</h2>
                         <p>無論是學權申訴、活動合作，或是任何對校園的建議，歡迎透過旁邊的管道與我們聯繫。</p>
                     </div>
-                    
                     <div class="contact-cards-container">
                         <a href="https://docs.google.com/forms/d/1Y_vE4giGK-6P9Y6eh4Firj1QZC9NDqJoJjJDMKzjLZ4/viewform" target="_blank" rel="noopener noreferrer" class="modern-contact-card form-card">
                             <div class="card-icon">
@@ -457,7 +393,6 @@
                             </div>
                             <div class="card-arrow">↗</div>
                         </a> 
-
                         <a href="mailto:chshstudentassociation@st.chsh.chc.edu.tw" class="modern-contact-card">
                             <div class="card-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -471,7 +406,6 @@
                             </div>
                             <div class="card-arrow">↗</div>
                         </a>
-                        
                         <a href="https://www.instagram.com/_chsh.sa.78th_/" target="_blank" class="modern-contact-card ig-card">
                             <div class="card-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -519,6 +453,52 @@
             <div id="modal-body" class="modal-body"></div>
         </div>
     </div>
+
+    <!-- 使用者條款彈出視窗 (Modal) -->
+    <div id="terms-modal" class="modal-overlay" style="z-index: 100000;">
+        <div class="modal-content" style="max-width: 650px;">
+            <div class="modal-header">
+                <h2 style="font-size: 1.6rem; font-weight: 900; color: var(--brand-navy);">使用者條款與隱私聲明</h2>
+            </div>
+            <div class="modal-body" style="font-size: 0.95rem; line-height: 1.8;">
+                <p style="margin-bottom: 1rem; color: var(--text-muted);">
+                    歡迎使用國立彰化高級中學學生會官方網站。進入並瀏覽本網站即視為您已充分閱讀並同意遵守以下條款：
+                </p>
+                
+                <div style="max-height: 280px; overflow-y: auto; padding-right: 8px; margin-bottom: 1.5rem; border: 1px solid var(--border-color); padding: 1.2rem; border-radius: 8px; background: var(--brand-light);">
+                    <p style="font-weight: 700; color: var(--brand-navy); margin-bottom: 0.3rem;">一、服務宗旨與資訊正確性</p>
+                    <p style="color: var(--text-muted); margin-bottom: 0.8rem;">
+                        本網站旨在促進校園學生自治、落實校規法規公開透明、公告會務進度與相關資訊。本會將盡力維持內容即時性與準確性，惟各項法規仍以學校主管機關與本會最新正式公文為準。
+                    </p>
+
+                    <p style="font-weight: 700; color: var(--brand-navy); margin-bottom: 0.3rem;">二、學權申訴與意見表單規範</p>
+                    <p style="color: var(--text-muted); margin-bottom: 0.8rem;">
+                        使用意見申訴平台時應本於事實理性陳述，不得惡意中傷、造謠、洗版或散布仇恨言論。本會嚴格遵守匿名原則，未經同意不得洩漏個人身分資訊。
+                    </p>
+
+                    <p style="font-weight: 700; color: var(--brand-navy); margin-bottom: 0.3rem;">三、智慧財產權聲明</p>
+                    <p style="color: var(--text-muted); margin-bottom: 0.8rem;">
+                        本網站所有視覺設計、標誌（LOGO）、文字內容、排版及架構均屬本會及權利人所有，未經授權請勿進行商業性重製、修改或惡意爬取。
+                    </p>
+
+                    <p style="font-weight: 700; color: var(--brand-navy); margin-bottom: 0.3rem;">四、外部連結與第三方平台</p>
+                    <p style="color: var(--text-muted); margin-bottom: 0.8rem;">
+                        本網站包含外部系統、社團 Instagram 及 Google 表單連結，使用者點擊後應遵守該平台規範，本會不承擔第三方平台營運責任。
+                    </p>
+
+                    <p style="font-weight: 700; color: var(--brand-navy); margin-bottom: 0.3rem;">五、不同意條款處理方式</p>
+                    <p style="color: var(--text-muted); margin-bottom: 0;">
+                        若您不同意本條款之任一內容，請點擊「不同意」按鈕，系統將自動啟動跳轉，將您導向至 YouTube「卡加布列島」，直到您準備接受服務條款。
+                    </p>
+                </div>
+
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button id="btn-terms-disagree" class="hero-btn secondary-btn" style="padding: 10px 22px; font-size: 0.95rem;">不同意</button>
+                    <button id="btn-terms-agree" class="hero-btn primary-btn" style="padding: 10px 22px; font-size: 0.95rem;">同意並進入</button>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <!-- 回到頂部按鈕 -->
     <button id="back-to-top" class="back-to-top" aria-label="回到頂部">
@@ -527,6 +507,7 @@
         </svg>
     </button>
     
+    <!-- 引入解析庫與腳本 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <script src="script.js" defer></script>
 </body>
