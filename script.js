@@ -217,15 +217,12 @@ function initTermsModal() {
 
     if (!termsModal) return;
 
-    // 檢查瀏覽器是否已同意
     if (!localStorage.getItem("chshsa_terms_accepted")) {
-        // 設定 2800 毫秒 (2.8秒) 延遲，等預設的白色 Loading 完全消失後再彈出
         setTimeout(() => {
             termsModal.classList.add("active");
         }, 2800);
     }
 
-    // 點擊「同意」
     if (btnAgree) {
         btnAgree.addEventListener("click", () => {
             localStorage.setItem("chshsa_terms_accepted", "true");
@@ -233,7 +230,6 @@ function initTermsModal() {
         });
     }
 
-    // 點擊「不同意」跳轉卡加布列島
     if (btnDisagree) {
         btnDisagree.addEventListener("click", () => {
             window.location.href = "https://www.youtube.com/watch?v=acBsZstdFHw&list=RDacBsZstdFHw&start_radio=1";
@@ -249,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadHistory();
     loadRules();
     loadLinks();
-    initTermsModal(); // 啟動條款視窗檢查
+    initTermsModal(); 
 });
 
 const mobileMenuBtn = document.getElementById('mobile-menu');
@@ -389,7 +385,6 @@ function filterRules() {
     let visibleCount = 0;
     const cards = document.querySelectorAll('.rule-card');
 
-    // 先讀取所有需要的資訊，再統一寫入 style，避免讀寫交錯造成的 layout thrashing
     const decisions = Array.from(cards).map(card => {
         const text = card.textContent.toLowerCase();
         const cardCategory = card.getAttribute('data-category');
