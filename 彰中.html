@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHSHSA | 彰化高中學生會</title>
+    <link rel="icon" href="image.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="preloader">
+        <div class="loader-logo">
+            <img src="image.png" alt="Loading...">
+        </div>
+        <div class="loader-spinner"></div>
+    </div>
+
+    <header>
+        <div class="brand-logo" onclick="navigateTo(0)">
+            <img src="image.png" alt="CHSHSA Logo">
+        </div>
+        
+        <div class="menu-toggle" id="mobile-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <nav id="main-nav">
+            <ul>
+                <li><a class="nav-link active" data-index="0">首頁</a></li>
+                <li><a class="nav-link" data-index="1">最新公告</a></li>
+                <li><a class="nav-link" data-index="2">校規與法規</a></li>
+                <li><a class="nav-link" data-index="3">關於我們</a></li>
+                <li><a class="nav-link" data-index="4">組織團隊</a></li>
+                <li><a class="nav-link" data-index="5">會史館</a></li>
+                <li><a class="nav-link" data-index="6">相關連結</a></li>
+                <li><a class="nav-link" href="club.html">社團名冊</a></li>
+                <li><a class="nav-link" data-index="7">聯絡我們</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="app-container">
+        
+        <!-- P1: 首頁 -->
+        <section class="page-section page-active" id="home">
+            <div class="page-content-wrapper">
+                <div class="hero-content">
+                    <div class="tagline">Changhua Senior High School</div>
+                    <h1>校園<br>下一個世代</h1>
+                    <p>結合實踐與創新，致力於捍衛學生權益，打造更完美的校園。</p>
+                    
+                    <div class="hero-actions">
+                        <button class="hero-btn primary-btn" onclick="navigateTo(1)">查看最新公告</button>
+                        <button class="hero-btn secondary-btn" onclick="navigateTo(7)">意見申訴 ↗</button>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="bg-code">&lt;&gt;</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- P2: 最新公告 -->
+        <section class="page-section page-hidden-right" id="news">
+            <div class="page-content-wrapper">
+                <div class="section-header">
+                    <span>01 / News & Events</span>
+                    <h2>最新公告</h2>
+                </div>
+                
+                <div class="news-container" id="news-container"></div>
+            </div>
+            
+            <footer class="footer">
+                <div class="footer-container">
+                    <div class="footer-info">
+                        <p>國立彰化高級中學 學生會</p>
+                        <p>地址：500 彰化縣彰化市中興路 78 號</p>
+                        <p>聯絡電話：04-7222121</p>
+                    </div>
+                    <hr class="footer-divider">
+                    <div class="footer-copyright">
+                        <p>&copy; 2026 彰化高中學生會. All Rights Reserved.</p>
+                    </div>
+                </div>
+            </footer>
+        </section>
+
+        <!-- P3: 校規與法規 -->
+        <section class="page-section page-hidden-right" id="rules">
+            <div class="page-content-wrapper">
+                <div class="section-header">
+                    <span>02 / Regulations & Rights</span>
+                    <h2>校規與法規專區</h2>
+                </div>
+
+                <div class="rules-toolbar">
+                    <input type="text" id="rule-search-input" placeholder="搜尋關鍵字（例如：教師、獎懲...）" oninput="filterRules()">
+                    <div class="rules-tabs">
+                        <button class="tab-btn active" onclick="switchRuleTab('all', this)">全部法規</button>
+                        <button class="tab-btn" onclick="switchRuleTab('school', this)">學校校規</button>
+                        <button class="tab-btn" onclick="switchRuleTab('sa', this)">自治法規</button>
+                    </div>
+                </div>
+
+                <div class="rules-container" id="rules-container"></div>
+            </div>
+
+            <footer class="footer">
+                <div class="footer-container">
+                    <div class="footer-info">
+                        <p>國立彰化高級中學 學生會</p>
+                        <p>地址：500 彰化縣彰化市中興路 78 號</p>
+                        <p>聯絡電話：04-7222121</p>
+                    </div>
+                    <hr class="footer-divider">
+                    <div class="footer-copyright">
+                        <p>&copy; 2026 彰化高中學生會. All Rights Reserved.</p>
+                    </div>
+                </div>
+            </footer>
+        </section>
+
+        <!-- P4: 關於我們 -->
+        <section class="page-section page-hidden-right" id="about">
+            <div class="page-content-wrapper">
+                <div class="section-header">
+                    <span>03 / About Us</span>
+                    <h2>關於學生會</h2>
+                </div>
+                <div class="about-grid">
+                    <div class="about-text">
+                        <p>彰化高中學生會（CHSH Student-Association）是校內學生自治組織。作為學校行政單位與全校同學之間的橋樑，為學生爭取應有的權益。</p>
+                        <p>從華陽崗之夜的策劃執行到校務建言的理性溝通，讓學生會成為大家發聲的舞台，讓每個想法都有機會實現，期望打造更好的校園。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <footer class="footer">
+                <div class="footer-container">
+                    <div class="footer-info">
+                        <p>國立彰化高級中學 學生會</p>
+                        <p>地址：500 彰化縣彰化市中興路 78 號</p>
+                        <p>聯絡電話：04-7222121</p>
+                    </div>
+                    <hr class="footer-divider">
+                    <div class="footer-copyright">
+                        <p>&copy; 2026 彰化高中學生會. All Rights Reserved.</p>
+                    </div>
+                </div>
+            </footer>
+        </section>
+
+        <!-- P5: 組織團隊 -->
+        <section class="page-section page-hidden-right" id="departments">
+            <div class="page-content-wrapper">
+                <div class="section-header">
+                    <span>04 / Our Team</span>
+                    <h2>組織架構與會務進度</h2>
+                </div>
+                
+                <div class="team-leaders">
+                    <div class="leader-card">
+                        <span>會長 / President</span>
+                        <h3>李孟庭</h3>
+                    </div>
+                    <div class="leader-card">
+                        <span>副會長 / Vice President</span>
+                        <h3>劉孟霖</h3>
+                    </div>
+                </div>
+
+                <div class="departments-grid">
+                    <div class="dept-card">
+                        <div class="dept-header">
+                            <h4>公關部</h4>
+                            <span class="dept-name">部長 楊侑霖</span>
+                        </div>
+                        <div class="dept-details">
+                            <div class="detail-group">
+                                <span class="detail-label">Core Duties / 具體職務</span>
+                                <ul class="clean-list duty-list">
+                                    <li>管理學生會 IG 帳號、Gmail 帳號</li>
+                                    <li>發布貼文、聲明稿等資訊公告</li>
+                                    <li>執辦特約商店（與店家簽約）</li>
+                                    <li>接收校內全體同學各方面的資訊並實時回應</li>
+                                    <li>穩定聯絡廠商、維持校際關係與本校形象</li>
+                                </ul>
+                            </div>
+                            <div class="detail-group">
+                                <span class="detail-label">Current / 進行中</span>
+                                <ul class="clean-list progress-list">
+                                    <li class="empty-state">專案進度更新中...</li>
+                                </ul>
+                            </div>
+                            <div class="detail-group">
+                                <span class="detail-label">Achieved / 已完成</span>
+                                <ul class="clean-list done-list">
+                                    <li class="empty-state">尚無資料</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dept-card">
+                        <div class="dept-header">
+                            <h4>活動部</h4>
+                            <span class="dept-name">部長 吳軒愷</span>
+                        </div>
+                        <div class="dept-details">
+                            <div class="detail-group">
+                                <span class="detail-label">Core Duties / 具體職務</span>
+                                <ul class="clean-list duty-list">
+                                    <li>舉辦大型活動（ex: 華陽崗之夜）</li>
+                                    <li>製作活動企劃書並舉行籌備會議</li>
+                                    <li>掌管並分配人力資源</li>
+                                    <li>當免費勞工</li>
+                                </ul>
+                            </div>
+                            <div class="detail-group">
+                                <span class="detail-label">Current / 進行中</span>
+                                <ul class="clean-list progress-list">
+                                    <li class="empty-state">專案進度更新中...</li>
+                                </ul>
+                            </div>
+                            <div class="detail-group">
+                                <span class="detail-label">Achieved / 已完成</span>
+                                <ul class="clean-list done-list">
+                                    <li class="empty-state">尚無資料</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dept-card">
+                        <div class="dept-header">
+                            <h4>文宣部</h4>
+                            <span class="dept-name">部長 蘇楷勛</span>
+                        </div>
+                        <div class="dept-details">
+                            <div class="detail-group">
+                                <span class="detail-label">Core Duties / 具體職務</span>
+                                <ul class="clean-list duty-list">
+                                    <li>製作文宣海報或活動主視覺</li>
+                                    <li>製作簡報並廣納攝影人才</li>
+                                    <li>在 LOGO 設計、資料排版上需要有一定的能力</li>
+                                </ul>
+                            </div>
+                            <div class="detail-group">
+                                <span class="detail-label">Current / 進行中</span>
+                                <ul class="clean-list progress-list">
+                                    <li class="empty-state">專案進度更新中...</li>
+                                </ul>
+                            </div>
+                            <div class="detail-group">
+                                <span class="detail-label">Achieved / 已完成</span>
+                                <ul class="clean-list done-list">
+                                    <li class="empty-state">尚無資料</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dept-card">
+                        <div class="dept-header">
+                            <h4>學權部</h4>
+                            <span class="dept-name">部長 江騏瑞</span>
+                        </div>
+                        <div class="dept-details">
+                            <div class="detail-group">
+                                <span class="detail-label">Core Duties / 具體職務</span>
+                                <ul class="clean-list duty-list">
+                                    <li>定期舉辦學權講座</li>
+                                    <li>管理學生會學生申訴平台（首頁）</li>
+                                    <li>代表學生參與相關牽係學生群體之會議</li>
+                                    <li>推廣並普及學權知識</li>
+                                </ul>
+                            </div>
+                            <div class="detail-group">
+                                <span class="detail-label">Current / 進行中</span>
+                                <ul class="clean-list progress-list">
+                                    <li class="empty-state">專案進度更新中...</li>
+                                </ul>
+                            </div>
+                            <div class="detail-group">
+                                <span class="detail-label">Achieved / 已完成</span>
+                                <ul class="clean-list done-list">
+                                    <li class="empty-state">尚無資料</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dept-card">
+                        <div class="dept-header">
+                            <h4>社發部</h4>
+                            <span class="dept-name">部長 吳泳成</span>
+                        </div>
+                        <div class="dept-details">
+                            <div class="detail-group">
+                                <span class="detail-label">Core Duties / 具體職務</span>
+                                <ul class="clean-list duty-list">
+                                    <li>舉辦社團博覽會、社團聯展、園遊會鬼屋等活動</li>
+                                    <li>編列社團活動補助費</li>
+                                    <li>處理社團評鑑獎勵</li>
+                                </ul>
+                            </div>
+                            <div class="detail-group">
+                                <span class="detail-label">Current / 進行中</span>
+                                <ul class="clean-list progress-list">
+                                    <li class="empty-state">專案進度更新中...</li>
+                                </ul>
+                            </div>
+                            <div class="detail-group">
+                                <span class="detail-label">Achieved / 已完成</span>
+                                <ul class="clean-list done-list">
+                                    <li class="empty-state">尚無資料</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dept-card">
+                        <div class="dept-header">
+                            <h4>總務部</h4>
+                            <span class="dept-name">部長 曹峰勝</span>
+                        </div>
+                        <div class="dept-details">
+                            <div class="detail-group">
+                                <span class="detail-label">Core Duties / 具體職務</span>
+                                <ul class="clean-list duty-list">
+                                    <li>收取會費</li>
+                                    <li>編列預算、製作決算表</li>
+                                    <li>管理學生會倉庫之所有商品</li>
+                                    <li>登記好流水帳及收據等</li>
+                                </ul>
+                            </div>
+                            <div class="detail-group">
+                                <span class="detail-label">Current / 進行中</span>
+                                <ul class="clean-list progress-list">
+                                    <li class="empty-state">專案進度更新中...</li>
+                                </ul>
+                            </div>
+                            <div class="detail-group">
+                                <span class="detail-label">Achieved / 已完成</span>
+                                <ul class="clean-list done-list">
+                                    <li class="empty-state">尚無資料</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="footer">
+                <div class="footer-container">
+                    <div class="footer-info">
+                        <p>國立彰化高級中學 學生會</p>
+                        <p>地址：500 彰化縣彰化市中興路 78 號</p>
+                        <p>聯絡電話：04-7222121</p>
+                    </div>
+                    <hr class="footer-divider">
+                    <div class="footer-copyright">
+                        <p>&copy; 2026 彰化高中學生會. All Rights Reserved.</p>
+                    </div>
+                </div>
+            </footer>
+        </section>
+
+        <!-- P6: 會史館 -->
+        <section class="page-section page-hidden-right" id="history">
+            <div class="page-content-wrapper">
+                <div class="section-header">
+                    <span>05 / History</span>
+                    <h2>會史館</h2>
+
+                    <div class="history-intro">
+                        <p class="history-tittle">承前啟後，歷久彌新。</p>
+                        <p>此處登載了第六十屆至今的學生會幹部名冊。</p>
+                    </div>                   
+                </div>
+                
+                <div class="history-timeline" id="history-container"></div>
+            </div>
+
+            <footer class="footer">
+                <div class="footer-container">
+                    <div class="footer-info">
+                        <p>國立彰化高級中學 學生會</p>
+                        <p>地址：500 彰化縣彰化市中興路 78 號</p>
+                        <p>聯絡電話：04-7222121</p>
+                    </div>
+                    <hr class="footer-divider">
+                    <div class="footer-copyright">
+                        <p>&copy; 2026 彰化高中學生會. All Rights Reserved.</p>
+                    </div>
+                </div>
+            </footer>
+        </section>
+
+        <!-- P7: 相關連結 -->
+        <section class="page-section page-hidden-right" id="links">
+            <div class="page-content-wrapper">
+                <div class="section-header">
+                    <span>06 / Related Links</span>
+                    <h2>相關連結</h2>
+                </div>
+
+                <div class="links-grid" id="links-container"></div>
+            </div>
+
+            <footer class="footer">
+                <div class="footer-container">
+                    <div class="footer-info">
+                        <p>國立彰化高級中學 學生會</p>
+                        <p>地址：500 彰化縣彰化市中興路 78 號</p>
+                        <p>聯絡電話：04-7222121</p>
+                    </div>
+                    <hr class="footer-divider">
+                    <div class="footer-copyright">
+                        <p>&copy; 2026 彰化高中學生會. All Rights Reserved.</p>
+                    </div>
+                </div>
+            </footer>
+        </section>
+
+        <!-- P8: 聯絡我們 -->
+        <section class="page-section page-hidden-right" id="contact">
+            <div class="page-content-wrapper">
+                <div class="section-header">
+                    <span>07 / Contact Us</span>
+                </div>
+                
+                <div class="contact-layout">
+                    <div class="contact-text">
+                        <h2>準備好<br>與我們交流了嗎？</h2>
+                        <p>無論是學權申訴、活動合作，或是任何對校園的建議，歡迎透過旁邊的管道與我們聯繫。</p>
+                    </div>
+                    
+                    <div class="contact-cards-container">
+                        <a href="https://docs.google.com/forms/d/1Y_vE4giGK-6P9Y6eh4Firj1QZC9NDqJoJjJDMKzjLZ4/viewform" target="_blank" rel="noopener noreferrer" class="modern-contact-card form-card">
+                            <div class="card-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path d="M19.5 3h-15C3.12 3 2 4.12 2 5.5v13C2 19.88 3.12 21 4.5 21h15c1.38 0 2.5-1.12 2.5-2.5v-13C22 4.12 20.88 3 19.5 3zM19.5 19.5h-15c-.28 0-.5-.22-.5-.5v-13c0-.28.22-.5.5-.5h15c.28 0 .5.22.5.5v13c0 .28-.22.5-.5.5z"/>
+                                    <path d="M6 10h12v1.5H6zM6 14h8v1.5H6zM6 6h12v1.5H6z"/>
+                                </svg>
+                            </div>
+                            <div class="card-info">
+                                <h4>線上意見匿名表單</h4>
+                                <p>填寫 Google 表單</p>
+                            </div>
+                            <div class="card-arrow">↗</div>
+                        </a> 
+
+                        <a href="mailto:chshstudentassociation@st.chsh.chc.edu.tw" class="modern-contact-card">
+                            <div class="card-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z" />
+                                    <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />
+                                </svg>
+                            </div>
+                            <div class="card-info">
+                                <h4>公務信箱</h4>
+                                <p>chshstudentassociation<br>@st.chsh.chc.edu.tw</p>
+                            </div>
+                            <div class="card-arrow">↗</div>
+                        </a>
+                        
+                        <a href="https://www.instagram.com/_chsh.sa.78th_/" target="_blank" class="modern-contact-card ig-card">
+                            <div class="card-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div class="card-info">
+                                <h4>官方 Instagram</h4>
+                                <p>@_chsh.sa.78th_</p>
+                            </div>
+                            <div class="card-arrow">↗</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="footer">
+                <div class="footer-container">
+                    <div class="footer-info">
+                        <p>國立彰化高級中學 學生會</p>
+                        <p>地址：500 彰化縣彰化市中興路 78 號</p>
+                        <p>聯絡電話：04-7222121</p>
+                    </div>
+                    <hr class="footer-divider">
+                    <div class="footer-copyright">
+                        <p>&copy; 2026 彰化高中學生會. All Rights Reserved.</p>
+                    </div>
+                </div>
+            </footer>
+        </section>
+
+    </main>
+
+    <!-- 公告內容彈出視窗 (Modal) -->
+    <div id="news-modal" class="modal-overlay" onclick="closeNewsModal(event)">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeNewsModal(event)">&times;</button>
+            <div class="modal-header">
+                <div class="news-meta">
+                    <span id="modal-date" class="news-date"></span>
+                    <span id="modal-tag" class="news-tag"></span>
+                </div>
+                <h2 id="modal-title"></h2>
+            </div>
+            <div id="modal-body" class="modal-body"></div>
+        </div>
+    </div>
+    
+    <!-- 回到頂部按鈕 -->
+    <button id="back-to-top" class="back-to-top" aria-label="回到頂部">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 19V5M5 12l7-7 7 7"/>
+        </svg>
+    </button>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="script.js" defer></script>
+</body>
+</html>
