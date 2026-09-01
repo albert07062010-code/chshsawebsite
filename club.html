@@ -351,9 +351,8 @@
         </div>
         <nav>
             <ul>
-                <li><a class="nav-link" id="back-to-home-link" href="sa.chshsga.org">返回首頁</a></li>
+                <li><a class="nav-link" id="back-to-home-link" href="/">返回首頁</a></li>
                 <li><a class="nav-link active">社團名冊</a></li>
-                
             </ul>
         </nav>
     </header>
@@ -401,7 +400,6 @@
     <!-- 引入 CSV 解析套件 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     
-    <!-- 整合後的完整 JavaScript 邏輯 -->
     <script>
         function escapeHTML(str) {
             if (!str) return '';
@@ -439,27 +437,6 @@
 
             container.innerHTML = `<p style="text-align:center; color:#666; padding: 2rem; font-weight: 700;">社團資料同步中...</p>`;
 
-            if (CLUBS_CSV_URL.includes("YOUR_")) {
-                const defaultClubs = [
-                    {
-                        id: "01",
-                        name: "資訊研究社",
-                        category: "學術類",
-                        description: "致力於程式設計、網頁開發、資訊安全與資訊科技交流，每年參與各項競賽與聯合迎新。",
-                        igUrl: "https://www.instagram.com/"
-                    },
-                    {
-                        id: "02",
-                        name: "吉他社",
-                        category: "音樂類",
-                        description: "以弦音凝聚熱情，從基礎木吉他教學到成發大合奏，提供喜愛音樂的同學盡情發揮的舞台。",
-                        igUrl: "https://www.instagram.com/"
-                    }
-                ];
-                initClubApp(defaultClubs);
-                return;
-            }
-
             Papa.parse(CLUBS_CSV_URL, {
                 download: true,
                 header: true,
@@ -481,15 +458,14 @@
             backToHomeLinks.forEach(element => {
                 if (element) {
                     element.addEventListener('click', (e) => {
-                        e.preventDefault(); // 阻擋瞬間跳轉
+                        e.preventDefault();
                         
-                        // 讓整個頁面淡出
                         document.body.style.transition = 'opacity 0.4s ease';
                         document.body.style.opacity = '0';
                         
-                        // 0.4 秒動畫結束後正式跳回首頁
                         setTimeout(() => {
-                            window.location.href = '彰中.html';
+                            // 統一導向網站首頁根路徑（index.html）
+                            window.location.href = './';
                         }, 400);
                     });
                 }
@@ -571,7 +547,6 @@
             container.innerHTML = data.map((club, index) => {
                 const safeLink = safeUrl(club.igUrl);
                 const clubId = escapeHTML(club.id || String(index + 1).padStart(2, '0'));
-                
                 const delay = (index % 6) * 0.08;
 
                 const igButtonHTML = safeLink 
