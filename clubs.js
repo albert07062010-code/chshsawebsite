@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // 0.4 秒動畫結束後正式跳回首頁
                 setTimeout(() => {
-                    window.location.href = '彰中.html';
+                    window.location.href = 'https//sa.chshsga.org';
                 }, 400);
             });
         }
