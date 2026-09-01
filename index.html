@@ -7,7 +7,7 @@
     <link rel="icon" href="image.png" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -102,7 +102,7 @@
                 </div>
 
                 <div class="rules-toolbar">
-                    <input type="text" id="rule-search-input" placeholder="搜尋關鍵字（例如：教師、獎懲...）" oninput="filterRulesDebounced()">
+                    <input type="text" id="rule-search-input" placeholder="搜尋關鍵字（例如：教師、獎懲...）" oninput="filterRules()">
                     <div class="rules-tabs">
                         <button class="tab-btn active" onclick="switchRuleTab('all', this)">全部法規</button>
                         <button class="tab-btn" onclick="switchRuleTab('school', this)">學校校規</button>
