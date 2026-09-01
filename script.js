@@ -24,7 +24,8 @@ function safeUrl(url) {
 
     return encodeURI(trimmed);
 }
-// google sheet連結
+
+// Google Sheets 連結
 const API_URLS = {
     news: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSubOQ7OEhEkolArIpxom1kTHbAOipGnNV-7GVTaamcPzUxG2qYN705AQK_uBLDFJMBIL6-HovaEzK-/pub?output=csv",
     history: "https://docs.google.com/spreadsheets/d/e/2PACX-1vT7gWoroJbHYGWLpxI9cxJ8p0dZw6VGV2KcE5SWzWm2TTePi_UzbkXjGowxayUaSRXlzgkYv51FQFm3/pub?output=csv",
@@ -203,11 +204,49 @@ function renderLinks(data, container) {
     `).join('');
 }
 
+// ----------------------------------------------------
+// 使用者條款彈跳視窗邏輯
+// ----------------------------------------------------
+function initTermsModal() {
+    const termsModal = document.getElementById("terms-modal");
+    const btnAgree = document.getElementById("btn-terms-agree");
+    const btnDisagree = document.getElementById("btn-terms-disagree");
+
+    if (!termsModal) return;
+
+    // 檢查瀏覽器是否已同意
+    if (!localStorage.getItem("chshsa_terms_accepted")) {
+        // 設定 2800 毫秒 (2.8秒) 延遲，等預設的白色 Loading 完全消失後再彈出
+        setTimeout(() => {
+            termsModal.classList.add("active");
+        }, 2800);
+    }
+
+    // 點擊「同意」
+    if (btnAgree) {
+        btnAgree.addEventListener("click", () => {
+            localStorage.setItem("chshsa_terms_accepted", "true");
+            termsModal.classList.remove("active");
+        });
+    }
+
+    // 點擊「不同意」跳轉卡加布列島
+    if (btnDisagree) {
+        btnDisagree.addEventListener("click", () => {
+            window.location.href = "https://www.youtube.com/watch?v=acBsZstdFHw&list=RDacBsZstdFHw&start_radio=1";
+        });
+    }
+}
+
+// ----------------------------------------------------
+// 初始化執行區
+// ----------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
     loadNews();
     loadHistory();
     loadRules();
     loadLinks();
+    initTermsModal(); // 啟動條款視窗檢查
 });
 
 const mobileMenuBtn = document.getElementById('mobile-menu');
@@ -236,11 +275,11 @@ let isAnimating = false;
     
 navLinks.forEach(link => {
     link.addEventListener('click', function(e) {
-        if (this.getAttribute('href') === 'club.html') {
+        if (this.getAttribute('href') === 'club.html' || this.getAttribute('href') === '/clubs' || this.getAttribute('href') === 'clubs/') {
             e.preventDefault();
             document.body.style.transition = 'opacity 0.4s ease';
             document.body.style.opacity = '0';
-            setTimeout(() => window.location.href = 'club.html', 400);
+            setTimeout(() => window.location.href = this.getAttribute('href'), 400);
             return;
         }
         
@@ -250,19 +289,22 @@ navLinks.forEach(link => {
         }
 
         if (isAnimating) return;
-        navigateTo(parseInt(this.getAttribute('data-index')));
+        
+        const indexValue = parseInt(this.getAttribute('data-index'));
+        if (!isNaN(indexValue)) {
+            navigateTo(indexValue);
+        }
     });
 });
 
 function navigateTo(targetIndex) {
-    if (targetIndex === currentIndex) return;
+    if (isNaN(targetIndex) || targetIndex === currentIndex) return;
     isAnimating = true;
 
     const currentDoc = pages[currentIndex];
     const targetDoc = pages[targetIndex];
     const direction = targetIndex > currentIndex ? 'right' : 'left';
     
-    // ★ 已修正：徹底解決索引錯位問題，改用 data-index 屬性直接綁定對應的選單按鈕
     navLinks.forEach(link => link.classList.remove('active'));
     const activeLink = document.querySelector(`.nav-link[data-index="${targetIndex}"]`);
     if (activeLink) activeLink.classList.add('active');
