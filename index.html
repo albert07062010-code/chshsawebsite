@@ -102,7 +102,7 @@
                 </div>
 
                 <div class="rules-toolbar">
-                    <input type="text" id="rule-search-input" placeholder="搜尋關鍵字（例如：教師、獎懲...）" oninput="filterRules()">
+                    <input type="text" id="rule-search-input" placeholder="搜尋關鍵字（例如：教師、獎懲...）" oninput="filterRulesDebounced()">
                     <div class="rules-tabs">
                         <button class="tab-btn active" onclick="switchRuleTab('all', this)">全部法規</button>
                         <button class="tab-btn" onclick="switchRuleTab('school', this)">學校校規</button>
