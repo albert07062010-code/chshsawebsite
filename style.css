@@ -126,12 +126,13 @@
     nav#main-nav {
         position: fixed;
         top: 0;
-        right: -100%;
+        right: 0;
         width: 260px;
         height: 100vh;
         background-color: var(--white);
         box-shadow: -5px 0 25px rgba(0, 0, 0, 0.1);
-        transition: right 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+        transform: translateX(100%);
+        transition: transform 0.4s cubic-bezier(0.77, 0, 0.175, 1);
         z-index: 1000;
         padding-top: var(--header-height);
         overflow-y: auto; 
@@ -139,7 +140,7 @@
         
     }
     
-    nav#main-nav.open { right: 0; }
+    nav#main-nav.open { transform: translateX(0); }
     
     nav ul {
         flex-direction: column;
@@ -301,7 +302,6 @@ nav a.nav-link.active::after {
     transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1), visibility 0.6s;
     display: flex;
     flex-direction: column;
-    will-change: transform, visibility;
 }
 
 .page-content-wrapper { 
@@ -387,14 +387,14 @@ nav a.nav-link.active::after {
     font-size: 1rem;
     font-weight: 900;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease, border-color 0.3s ease;
     font-family: inherit;
     border: none;
 }
 
 .hero-btn.primary-btn {
-    background-color: #ef4a45;
-    color: #eaeaea;
+    background-color: var(--brand-red);
+    color: var(--white);
     box-shadow: 0 4px 15px rgba(226, 74, 69, 0.3);
 }
 
@@ -468,7 +468,7 @@ nav a.nav-link.active::after {
     border: 1px solid var(--border-color);
     border-radius: 12px;
     text-decoration: none;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .news-item:hover {
@@ -519,7 +519,7 @@ nav a.nav-link.active::after {
     font-size: 1.5rem;
     font-weight: bold;
     margin-left: 1rem;
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease, color 0.3s ease;
 }
 
 .news-item:hover .news-arrow {
@@ -564,7 +564,7 @@ nav a.nav-link.active::after {
     border-radius: 6px;
     cursor: pointer;
     font-weight: 700;
-    transition: all 0.3s;
+    transition: background-color 0.3s, color 0.3s;
     font-family: inherit;
     font-size: 0.95rem;
 }
@@ -628,15 +628,23 @@ nav a.nav-link.active::after {
 }
 
 .rule-body {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.4s ease, padding 0.4s ease;
-    padding: 0 1.5rem;
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     background: var(--white);
 }
 
+.rule-body-inner {
+    overflow: hidden;
+    padding: 0 1.5rem;
+    min-height: 0;
+}
+
 .rule-card.open .rule-body {
-    max-height: 2000px;
+    grid-template-rows: 1fr;
+}
+
+.rule-card.open .rule-body-inner {
     padding-bottom: 1.5rem;
 }
 
@@ -909,7 +917,7 @@ nav a.nav-link.active::after {
     padding: 4px 10px;
     border-radius: 6px; 
     border: 1px solid transparent;
-    transition: all 0.2s ease;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .timeline-content:hover .pill-tag { border-color: #E2E8F0; background: var(--white); }
@@ -945,7 +953,7 @@ nav a.nav-link.active::after {
     color: inherit;
     position: relative;
     overflow: hidden;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .card-icon {
@@ -959,7 +967,7 @@ nav a.nav-link.active::after {
     box-shadow: 0 4px 15px rgba(0,0,0,0.04);
     margin-right: 1.5rem;
     flex-shrink: 0;
-    transition: all 0.3s ease;
+    transition: box-shadow 0.3s ease;
 }
 
 .card-icon svg { width: 28px; height: 28px; fill: var(--brand-navy); transition: fill 0.3s ease; }
@@ -1071,7 +1079,7 @@ nav a.nav-link.active::after {
     border-radius: 12px;
     text-decoration: none;
     color: inherit;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
 }
 
 .link-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
@@ -1112,7 +1120,7 @@ nav a.nav-link.active::after {
     opacity: 0;
     visibility: hidden;
     transform: translateY(20px);
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     z-index: 999;
     display: flex;
     justify-content: center;
