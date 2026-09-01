@@ -44,6 +44,7 @@ function fetchCsvData(url, containerId, loadingMsg, onSuccess) {
     Papa.parse(url, {
         download: true,
         header: true,
+        worker: true,
         complete: results => onSuccess(results.data, container),
         error: err => {
             container.innerHTML = `
@@ -148,12 +149,14 @@ function loadRules() {
                         <span class="toggle-icon">+</span>
                     </div>
                     <div class="rule-body">
-                        <div class="rule-meta">
-                            <span>最後修訂日期：${escapeHTML(rule.updated) || '未知'}</span>
-                        </div>
-                        <div class="rule-content">
-                            ${summaryHTML}
-                            ${linkHTML}
+                        <div class="rule-body-inner">
+                            <div class="rule-meta">
+                                <span>最後修訂日期：${escapeHTML(rule.updated) || '未知'}</span>
+                            </div>
+                            <div class="rule-content">
+                                ${summaryHTML}
+                                ${linkHTML}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -309,6 +312,9 @@ function navigateTo(targetIndex) {
     const activeLink = document.querySelector(`.nav-link[data-index="${targetIndex}"]`);
     if (activeLink) activeLink.classList.add('active');
 
+    currentDoc.style.willChange = 'transform';
+    targetDoc.style.willChange = 'transform';
+
     targetDoc.style.transition = 'none';
     targetDoc.className = `page-section ${direction === 'right' ? 'page-hidden-right' : 'page-hidden-left'}`;
     void targetDoc.offsetWidth; 
@@ -324,7 +330,9 @@ function navigateTo(targetIndex) {
     
     setTimeout(() => {
         isAnimating = false;
-        currentDoc.scrollTop = 0; 
+        currentDoc.scrollTop = 0;
+        currentDoc.style.willChange = '';
+        targetDoc.style.willChange = '';
     }, 600);
 }
 
@@ -379,25 +387,32 @@ function switchRuleTab(category, btnElement) {
 function filterRules() {
     const keyword = document.getElementById('rule-search-input').value.toLowerCase();
     let visibleCount = 0;
-    
-    document.querySelectorAll('.rule-card').forEach(card => {
+    const cards = document.querySelectorAll('.rule-card');
+
+    // 先讀取所有需要的資訊，再統一寫入 style，避免讀寫交錯造成的 layout thrashing
+    const decisions = Array.from(cards).map(card => {
         const text = card.textContent.toLowerCase();
         const cardCategory = card.getAttribute('data-category');
         const matchCategory = (currentRuleCategory === 'all' || cardCategory === currentRuleCategory);
         const matchKeyword = text.includes(keyword);
-        
-        if (matchCategory && matchKeyword) {
-            card.style.display = 'block';
-            visibleCount++;
-        } else {
-            card.style.display = 'none';
-        }
+        return { card, show: matchCategory && matchKeyword };
+    });
+
+    decisions.forEach(({ card, show }) => {
+        card.style.display = show ? 'block' : 'none';
+        if (show) visibleCount++;
     });
 
     const noRulesMsg = document.getElementById('no-rules-msg');
     if (noRulesMsg) {
         noRulesMsg.style.display = visibleCount === 0 ? 'block' : 'none';
     }
+}
+
+let filterRulesDebounceTimer = null;
+function filterRulesDebounced() {
+    clearTimeout(filterRulesDebounceTimer);
+    filterRulesDebounceTimer = setTimeout(filterRules, 150);
 }
 
 function toggleRule(headerElement) {
@@ -417,16 +432,25 @@ window.addEventListener('load', () => {
 const backToTopBtn = document.getElementById('back-to-top');
 
 if (backToTopBtn) {
+    let scrollTicking = false;
+    let btnIsShown = false;
+
     pages.forEach(page => {
         page.addEventListener('scroll', function() {
-            if (this.classList.contains('page-active')) {
-                if (this.scrollTop > 300) {
-                    backToTopBtn.classList.add('show');
-                } else {
-                    backToTopBtn.classList.remove('show');
+            if (!this.classList.contains('page-active')) return;
+            if (scrollTicking) return;
+            scrollTicking = true;
+
+            const scrollTop = this.scrollTop;
+            requestAnimationFrame(() => {
+                const shouldShow = scrollTop > 300;
+                if (shouldShow !== btnIsShown) {
+                    backToTopBtn.classList.toggle('show', shouldShow);
+                    btnIsShown = shouldShow;
                 }
-            }
-        });
+                scrollTicking = false;
+            });
+        }, { passive: true });
     });
 
     backToTopBtn.addEventListener('click', () => {
