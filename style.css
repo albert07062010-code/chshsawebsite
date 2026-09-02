@@ -1,4 +1,4 @@
-:root {
+:root{    
     --brand-navy: #1A2332;
     --brand-red: #E24A45;
     --brand-light: #F8F9FA;
@@ -86,12 +86,13 @@
    ========================================= */
 @media (max-width: 992px) {
     .contact-layout { 
-        grid-template-columns: 1fr; 
-        gap: 2.5rem; 
+        grid-template-columns: 1fr !important; 
+        gap: 2.5rem !important; 
         margin-top: 2rem !important; 
     }
     
     #home .page-content-wrapper { flex-direction: column !important; }
+    
     
     /* 首頁：重塑視覺，解決太空洞的問題 */
     .hero-content { 
@@ -154,6 +155,27 @@
     .menu-toggle.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
     .menu-toggle.open span:nth-child(2) { opacity: 0; }
     .menu-toggle.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+    /* ★ 修復：聯絡我們卡片改為垂直置中，避免信箱太長擠爆排版 */
+    .modern-contact-card { 
+        flex-direction: column !important; /* 強制上下排列 */
+        align-items: center !important;     /* 內容水平置中 */
+        text-align: center !important;
+        padding: 2rem 1.5rem !important;
+        gap: 0.8rem !important;
+    }
+    .card-icon { 
+        margin-right: 0 !important;         /* 移除原本的右側留白 */
+        margin-bottom: 0.5rem !important;   /* 改為下方留白 */
+        width: 56px !important; 
+        height: 56px !important;
+    }
+    .card-icon svg { 
+        width: 24px; 
+        height: 24px; 
+    }
+    .card-arrow { display: none !important;
+         /* 置中排版時把箭頭藏起來比較好看 */ }
 }
 
 /* =========================================
@@ -173,22 +195,6 @@
     .departments-grid {
         grid-template-columns: 1fr;
     }
-    
-    /* ★ 修復：聯絡我們卡片改為垂直置中，避免信箱太長擠爆排版 */
-    .modern-contact-card { 
-        flex-direction: column;
-        text-align: center;
-        padding: 2rem 1.5rem;
-        gap: 0.5rem;
-    }
-    .card-icon { 
-        margin-right: 0; 
-        margin-bottom: 1rem;
-        width: 56px; 
-        height: 56px; 
-    }
-    .card-icon svg { width: 24px; height: 24px; }
-    .card-arrow { display: none; /* 置中排版時把箭頭藏起來比較好看 */ }
     
     .footer { padding: 2.5rem 6% 1.5rem; }
     
@@ -388,7 +394,7 @@ nav a.nav-link.active::after {
     font-weight: 900;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    font-family: inherit;
+    font-family: 'Inter', 'Microsoft JhengHei', '微軟正黑體', sans-serif;
     border: none;
 }
 
@@ -932,7 +938,10 @@ nav a.nav-link.active::after {
 }
 
 .contact-text p { font-size: 1.1rem; color: var(--text-muted); line-height: 1.8; }
-.contact-cards-container { display: flex; flex-direction: column; gap: 1.5rem; }
+.contact-cards-container { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 1.5rem; }
 
 .modern-contact-card {
     display: flex;
@@ -962,11 +971,32 @@ nav a.nav-link.active::after {
     transition: all 0.3s ease;
 }
 
-.card-icon svg { width: 28px; height: 28px; fill: var(--brand-navy); transition: fill 0.3s ease; }
-.card-info { flex: 1; min-width: 0; }
-.card-info h4 { font-size: 1rem; color: var(--text-muted); margin-bottom: 0.3rem; font-weight: 700; letter-spacing: 0.05em; }
-.card-info p { font-family: 'Inter', sans-serif; font-size: clamp(1rem, 2vw, 1.2rem); font-weight: 900; color: var(--brand-navy); word-break: break-word; }
-.card-arrow { font-size: 1.5rem; color: #CBD5E1; font-weight: bold; transition: transform 0.3s ease, color 0.3s ease; margin-left: 1rem; }
+.card-icon svg { 
+    width: 28px !important; 
+    height: 28px !important; 
+    fill: var(--brand-navy); 
+    transition: fill 0.3s ease; }
+
+.card-info { 
+    width: 100% !important;
+}
+.card-info h4 { 
+    font-size: 1rem; 
+    color: var(--text-muted); 
+    margin-bottom: 0.3rem; 
+    font-weight: 700; 
+    letter-spacing: 0.05em; 
+}
+.card-info p { 
+    font-size: 1.05rem !important;      
+    word-break: break-all !important;
+}
+
+.card-arrow { 
+    font-size: 1.5rem; 
+    color: #CBD5E1; 
+    font-weight: bold; 
+    transition: transform 0.3s ease, color 0.3s ease; margin-left: 1rem; }
 
 @media (hover: hover) {
     .modern-contact-card:hover {
