@@ -990,12 +990,18 @@ nav a.nav-link.active::after {
     color: var(--white);
     padding: 3rem 5% 2rem;
     margin-top: auto;
-    border-top: 4px solid #533e3d;
+    border-top: 4px solid #eb6760;
 }
 
 .footer-container { max-width: 1000px; margin: 0 auto; text-align: center; }
 .footer-info p { margin-bottom: 8px; color: rgba(255, 255, 255, 0.7); font-size: 0.95rem; letter-spacing: 0.05em; }
-.footer-info p:first-child { font-size: 1.1rem; font-weight: 700; color: var(--white); margin-bottom: 15px; }
+.footer-info p:first-child {
+    font-size: 1.1rem; 
+    font-weight: 700; 
+    color: var(--white);
+    margin-bottom: 15px; 
+    font-family: "Microsoft JhengHei", "微軟正黑體", sans-serif;
+    }
 .footer-divider { border: none; border-top: 1px solid rgba(255, 255, 255, 0.15); margin: 1.5rem auto; max-width: 600px; }
 .footer-copyright { font-family: 'Inter', sans-serif; font-size: 0.85rem; color: rgba(255, 255, 255, 0.5); }
 
