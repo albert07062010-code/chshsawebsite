@@ -25,18 +25,6 @@ function safeUrl(url) {
     return encodeURI(trimmed);
 }
 
-// 路由與頁面標題配置
-const ROUTE_CONFIG = {
-    '': { index: 0, title: 'CHSHSA | 彰化高中學生會' },
-    'news': { index: 1, title: '最新公告 | 彰化高中學生會' },
-    'rules': { index: 2, title: '校規與法規專區 | 彰化高中學生會' },
-    'about': { index: 3, title: '關於我們 | 彰化高中學生會' },
-    'departments': { index: 4, title: '組織團隊與進度 | 彰化高中學生會' },
-    'history': { index: 5, title: '歷屆會史館 | 彰化高中學生會' },
-    'links': { index: 6, title: '相關連結 | 彰化高中學生會' },
-    'contact': { index: 7, title: '聯絡我們 | 彰化高中學生會' }
-};
-
 // Google Sheets 連結
 const API_URLS = {
     news: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSubOQ7OEhEkolArIpxom1kTHbAOipGnNV-7GVTaamcPzUxG2qYN705AQK_uBLDFJMBIL6-HovaEzK-/pub?output=csv",
@@ -226,12 +214,15 @@ function initTermsModal() {
 
     if (!termsModal) return;
 
+    // 檢查瀏覽器是否已同意
     if (!localStorage.getItem("chshsa_terms_accepted")) {
+        // 設定 2800 毫秒 (2.8秒) 延遲，等預設的白色 Loading 完全消失後再彈出
         setTimeout(() => {
             termsModal.classList.add("active");
         }, 2800);
     }
 
+    // 點擊「同意」
     if (btnAgree) {
         btnAgree.addEventListener("click", () => {
             localStorage.setItem("chshsa_terms_accepted", "true");
@@ -239,6 +230,7 @@ function initTermsModal() {
         });
     }
 
+    // 點擊「不同意」跳轉卡加布列島
     if (btnDisagree) {
         btnDisagree.addEventListener("click", () => {
             window.location.href = "https://www.youtube.com/watch?v=acBsZstdFHw&list=RDacBsZstdFHw&start_radio=1";
@@ -246,13 +238,66 @@ function initTermsModal() {
     }
 }
 
+// ----------------------------------------------------
+// 初始化執行區
+// ----------------------------------------------------
+document.addEventListener('DOMContentLoaded', () => {
+    loadNews();
+    loadHistory();
+    loadRules();
+    loadLinks();
+    initTermsModal(); // 啟動條款視窗檢查
+});
+
+const mobileMenuBtn = document.getElementById('mobile-menu');
+const mainNav = document.getElementById('main-nav');
+
+if (mobileMenuBtn && mainNav) {
+    mobileMenuBtn.addEventListener('click', () => {
+        mobileMenuBtn.classList.toggle('open');
+        mainNav.classList.toggle('open');
+    });
+
+    document.addEventListener('click', (e) => {
+        if (mobileMenuBtn.classList.contains('open')) {
+            if (!mainNav.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                mobileMenuBtn.classList.remove('open');
+                mainNav.classList.remove('open');
+            }
+        }
+    });
+}
+
 const navLinks = document.querySelectorAll('.nav-link');
 const pages = document.querySelectorAll('.page-section');
 let currentIndex = 0;
 let isAnimating = false;
+    
+navLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+        if (this.getAttribute('href') === 'club.html' || this.getAttribute('href') === '/clubs' || this.getAttribute('href') === 'clubs/') {
+            e.preventDefault();
+            document.body.style.transition = 'opacity 0.4s ease';
+            document.body.style.opacity = '0';
+            setTimeout(() => window.location.href = this.getAttribute('href'), 400);
+            return;
+        }
+        
+        if (window.innerWidth <= 992 && mobileMenuBtn && mainNav) {
+            mobileMenuBtn.classList.remove('open');
+            mainNav.classList.remove('open');
+        }
 
-// 頁面切換與路由同步核心
-function navigateTo(targetIndex, pushHistory = true) {
+        if (isAnimating) return;
+        
+        const indexValue = parseInt(this.getAttribute('data-index'));
+        if (!isNaN(indexValue)) {
+            navigateTo(indexValue);
+        }
+    });
+});
+
+function navigateTo(targetIndex) {
     if (isNaN(targetIndex) || targetIndex === currentIndex) return;
     isAnimating = true;
 
@@ -260,18 +305,6 @@ function navigateTo(targetIndex, pushHistory = true) {
     const targetDoc = pages[targetIndex];
     const direction = targetIndex > currentIndex ? 'right' : 'left';
     
-    // 找出對應路徑與標題
-    const routeEntry = Object.entries(ROUTE_CONFIG).find(([path, config]) => config.index === targetIndex);
-    if (routeEntry) {
-        const [path, config] = routeEntry;
-        const targetUrl = path === '' ? '/' : `/${path}`;
-        
-        if (pushHistory) {
-            history.pushState({ index: targetIndex }, '', targetUrl);
-        }
-        document.title = config.title;
-    }
-
     navLinks.forEach(link => link.classList.remove('active'));
     const activeLink = document.querySelector(`.nav-link[data-index="${targetIndex}"]`);
     if (activeLink) activeLink.classList.add('active');
@@ -294,82 +327,6 @@ function navigateTo(targetIndex, pushHistory = true) {
         currentDoc.scrollTop = 0; 
     }, 600);
 }
-
-// 監聽瀏覽器上一頁 / 下一頁
-window.addEventListener('popstate', (e) => {
-    const path = window.location.pathname.replace(/^\/+|\/+$/g, '');
-    const matched = ROUTE_CONFIG[path] || ROUTE_CONFIG[''];
-    if (matched) {
-        navigateTo(matched.index, false);
-    }
-});
-
-// 初始化執行區
-document.addEventListener('DOMContentLoaded', () => {
-    loadNews();
-    loadHistory();
-    loadRules();
-    loadLinks();
-    initTermsModal();
-
-    // 依當前網址路徑自動跳轉至對應頁籤
-    const currentPath = window.location.pathname.replace(/^\/+|\/+$/g, '');
-    const initialConfig = ROUTE_CONFIG[currentPath];
-    if (initialConfig && initialConfig.index !== 0) {
-        const initialIndex = initialConfig.index;
-        pages[0].className = 'page-section page-hidden-left';
-        pages[initialIndex].className = 'page-section page-active';
-        navLinks.forEach(link => link.classList.remove('active'));
-        const activeLink = document.querySelector(`.nav-link[data-index="${initialIndex}"]`);
-        if (activeLink) activeLink.classList.add('active');
-        document.title = initialConfig.title;
-        currentIndex = initialIndex;
-    }
-});
-
-const mobileMenuBtn = document.getElementById('mobile-menu');
-const mainNav = document.getElementById('main-nav');
-
-if (mobileMenuBtn && mainNav) {
-    mobileMenuBtn.addEventListener('click', () => {
-        mobileMenuBtn.classList.toggle('open');
-        mainNav.classList.toggle('open');
-    });
-
-    document.addEventListener('click', (e) => {
-        if (mobileMenuBtn.classList.contains('open')) {
-            if (!mainNav.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
-                mobileMenuBtn.classList.remove('open');
-                mainNav.classList.remove('open');
-            }
-        }
-    });
-}
-
-navLinks.forEach(link => {
-    link.addEventListener('click', function(e) {
-        const href = this.getAttribute('href');
-        
-        // 外部連結或社團名冊照常開啟
-        if (href.startsWith('http') || href.includes('/clubs')) {
-            return;
-        }
-
-        e.preventDefault();
-
-        if (window.innerWidth <= 992 && mobileMenuBtn && mainNav) {
-            mobileMenuBtn.classList.remove('open');
-            mainNav.classList.remove('open');
-        }
-
-        if (isAnimating) return;
-        
-        const indexValue = parseInt(this.getAttribute('data-index'));
-        if (!isNaN(indexValue)) {
-            navigateTo(indexValue);
-        }
-    });
-});
 
 function openNewsModal(index, event) {
     event.preventDefault(); 
