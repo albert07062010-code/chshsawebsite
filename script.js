@@ -263,18 +263,33 @@ document.addEventListener('DOMContentLoaded', () => {
 const mobileMenuBtn = document.getElementById('mobile-menu');
 const mainNav = document.getElementById('main-nav');
 
+function setMenuOpen(open) {
+    if (!mobileMenuBtn || !mainNav) return;
+    mobileMenuBtn.classList.toggle('open', open);
+    mainNav.classList.toggle('open', open);
+    mobileMenuBtn.setAttribute('aria-expanded', String(open));
+    mobileMenuBtn.setAttribute('aria-label', open ? '關閉選單' : '開啟選單');
+}
+
 if (mobileMenuBtn && mainNav) {
     mobileMenuBtn.addEventListener('click', () => {
-        mobileMenuBtn.classList.toggle('open');
-        mainNav.classList.toggle('open');
+        setMenuOpen(!mainNav.classList.contains('open'));
     });
 
+    // 點選單以外的地方關閉
     document.addEventListener('click', (e) => {
-        if (mobileMenuBtn.classList.contains('open')) {
-            if (!mainNav.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
-                mobileMenuBtn.classList.remove('open');
-                mainNav.classList.remove('open');
-            }
+        if (mainNav.classList.contains('open') &&
+            !mainNav.contains(e.target) &&
+            !mobileMenuBtn.contains(e.target)) {
+            setMenuOpen(false);
+        }
+    });
+
+    // 按 Esc 關閉，並把焦點還給按鈕
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && mainNav.classList.contains('open')) {
+            setMenuOpen(false);
+            mobileMenuBtn.focus();
         }
     });
 }
@@ -300,10 +315,8 @@ navLinks.forEach(link => {
         // 阻止 #hash 原生錨點跳動，避免破壞水平滑動版面
         e.preventDefault();
 
-        if (window.innerWidth <= 992 && mobileMenuBtn && mainNav) {
-            mobileMenuBtn.classList.remove('open');
-            mainNav.classList.remove('open');
-        }
+        // 所有螢幕尺寸都用選單按鈕，點選項目後收合
+        setMenuOpen(false);
 
         if (isAnimating) return;
         
