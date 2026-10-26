@@ -166,7 +166,7 @@ function loadRules() {
 }
 
 function loadLinks() {
-    const container = document.getById ? document.getElementById('links-container') : document.querySelector('#links-container');
+    const container = document.getElementById('links-container');
     if (!container) return;
 
     if (API_URLS.links && !API_URLS.links.includes("YOUR_")) {
@@ -247,49 +247,23 @@ document.addEventListener('DOMContentLoaded', () => {
     loadRules();
     loadLinks();
     initTermsModal(); // 啟動條款視窗檢查
-
-    // 若使用者從搜尋引擎點進帶有 #hash 的網址（如 #rules），自動切換到對應分頁
-    if (window.location.hash) {
-        const targetLink = document.querySelector(`.nav-link[href="${window.location.hash}"]`);
-        if (targetLink) {
-            const targetIdx = parseInt(targetLink.getAttribute('data-index'), 10);
-            if (!isNaN(targetIdx) && targetIdx !== 0) {
-                navigateTo(targetIdx);
-            }
-        }
-    }
 });
 
 const mobileMenuBtn = document.getElementById('mobile-menu');
 const mainNav = document.getElementById('main-nav');
 
-function setMenuOpen(open) {
-    if (!mobileMenuBtn || !mainNav) return;
-    mobileMenuBtn.classList.toggle('open', open);
-    mainNav.classList.toggle('open', open);
-    mobileMenuBtn.setAttribute('aria-expanded', String(open));
-    mobileMenuBtn.setAttribute('aria-label', open ? '關閉選單' : '開啟選單');
-}
-
 if (mobileMenuBtn && mainNav) {
     mobileMenuBtn.addEventListener('click', () => {
-        setMenuOpen(!mainNav.classList.contains('open'));
+        mobileMenuBtn.classList.toggle('open');
+        mainNav.classList.toggle('open');
     });
 
-    // 點選單以外的地方關閉
     document.addEventListener('click', (e) => {
-        if (mainNav.classList.contains('open') &&
-            !mainNav.contains(e.target) &&
-            !mobileMenuBtn.contains(e.target)) {
-            setMenuOpen(false);
-        }
-    });
-
-    // 按 Esc 關閉，並把焦點還給按鈕
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && mainNav.classList.contains('open')) {
-            setMenuOpen(false);
-            mobileMenuBtn.focus();
+        if (mobileMenuBtn.classList.contains('open')) {
+            if (!mainNav.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                mobileMenuBtn.classList.remove('open');
+                mainNav.classList.remove('open');
+            }
         }
     });
 }
@@ -301,26 +275,22 @@ let isAnimating = false;
     
 navLinks.forEach(link => {
     link.addEventListener('click', function(e) {
-        const href = this.getAttribute('href') || '';
-
-        // 處理「社團名冊」外部/子頁面連結的淡出跳轉
-        if (href === 'club.html' || href === '/clubs' || href === 'clubs/' || href.endsWith('/clubs')) {
+        if (this.getAttribute('href') === 'club.html' || this.getAttribute('href') === '/clubs' || this.getAttribute('href') === 'clubs/') {
             e.preventDefault();
             document.body.style.transition = 'opacity 0.4s ease';
             document.body.style.opacity = '0';
-            setTimeout(() => window.location.href = href, 400);
+            setTimeout(() => window.location.href = this.getAttribute('href'), 400);
             return;
         }
         
-        // 阻止 #hash 原生錨點跳動，避免破壞水平滑動版面
-        e.preventDefault();
-
-        // 所有螢幕尺寸都用選單按鈕，點選項目後收合
-        setMenuOpen(false);
+        if (window.innerWidth <= 992 && mobileMenuBtn && mainNav) {
+            mobileMenuBtn.classList.remove('open');
+            mainNav.classList.remove('open');
+        }
 
         if (isAnimating) return;
         
-        const indexValue = parseInt(this.getAttribute('data-index'), 10);
+        const indexValue = parseInt(this.getAttribute('data-index'));
         if (!isNaN(indexValue)) {
             navigateTo(indexValue);
         }
@@ -328,43 +298,34 @@ navLinks.forEach(link => {
 });
 
 function navigateTo(targetIndex) {
-    if (isNaN(targetIndex) || targetIndex === currentIndex || !pages[targetIndex]) return;
-    if (isAnimating) return;
+    if (isNaN(targetIndex) || targetIndex === currentIndex) return;
     isAnimating = true;
 
     const currentDoc = pages[currentIndex];
     const targetDoc = pages[targetIndex];
     const direction = targetIndex > currentIndex ? 'right' : 'left';
     
-    // 更新導覽列 active 狀態
     navLinks.forEach(link => link.classList.remove('active'));
     const activeLink = document.querySelector(`.nav-link[data-index="${targetIndex}"]`);
     if (activeLink) activeLink.classList.add('active');
 
-    // 強制瀏覽器準備動畫起點
     targetDoc.style.transition = 'none';
     targetDoc.className = `page-section ${direction === 'right' ? 'page-hidden-right' : 'page-hidden-left'}`;
+    void targetDoc.offsetWidth; 
+
+    targetDoc.style.transition = 'transform 0.6s cubic-bezier(0.77, 0, 0.175, 1), visibility 0.6s';
+    currentDoc.className = `page-section ${direction === 'right' ? 'page-hidden-left' : 'page-hidden-right'}`;
+    targetDoc.className = 'page-section page-active';
+
+    currentIndex = targetIndex;
     
-    // 使用雙重 rAF 確保瀏覽器完成 DOM 渲染再啟動動畫，解決卡頓閃爍
-    requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-            targetDoc.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease';
-            currentDoc.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease';
-            
-            currentDoc.className = `page-section ${direction === 'right' ? 'page-hidden-left' : 'page-hidden-right'}`;
-            targetDoc.className = 'page-section page-active';
-            
-            currentIndex = targetIndex;
-            
-            const backToTopBtn = document.getElementById('back-to-top');
-            if (backToTopBtn) backToTopBtn.classList.remove('show');
-            
-            setTimeout(() => {
-                isAnimating = false;
-                currentDoc.scrollTop = 0; 
-            }, 500);
-        });
-    });
+    const backToTopBtn = document.getElementById('back-to-top');
+    if(backToTopBtn) backToTopBtn.classList.remove('show');
+    
+    setTimeout(() => {
+        isAnimating = false;
+        currentDoc.scrollTop = 0; 
+    }, 600);
 }
 
 function openNewsModal(index, event) {
