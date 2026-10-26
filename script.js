@@ -166,7 +166,7 @@ function loadRules() {
 }
 
 function loadLinks() {
-    const container = document.getElementById('links-container');
+    const container = document.getById ? document.getElementById('links-container') : document.querySelector('#links-container');
     if (!container) return;
 
     if (API_URLS.links && !API_URLS.links.includes("YOUR_")) {
@@ -247,6 +247,17 @@ document.addEventListener('DOMContentLoaded', () => {
     loadRules();
     loadLinks();
     initTermsModal(); // 啟動條款視窗檢查
+
+    // 若使用者從搜尋引擎點進帶有 #hash 的網址（如 #rules），自動切換到對應分頁
+    if (window.location.hash) {
+        const targetLink = document.querySelector(`.nav-link[href="${window.location.hash}"]`);
+        if (targetLink) {
+            const targetIdx = parseInt(targetLink.getAttribute('data-index'), 10);
+            if (!isNaN(targetIdx) && targetIdx !== 0) {
+                navigateTo(targetIdx);
+            }
+        }
+    }
 });
 
 const mobileMenuBtn = document.getElementById('mobile-menu');
@@ -275,14 +286,20 @@ let isAnimating = false;
     
 navLinks.forEach(link => {
     link.addEventListener('click', function(e) {
-        if (this.getAttribute('href') === 'club.html' || this.getAttribute('href') === '/clubs' || this.getAttribute('href') === 'clubs/') {
+        const href = this.getAttribute('href') || '';
+
+        // 處理「社團名冊」外部/子頁面連結的淡出跳轉
+        if (href === 'club.html' || href === '/clubs' || href === 'clubs/' || href.endsWith('/clubs')) {
             e.preventDefault();
             document.body.style.transition = 'opacity 0.4s ease';
             document.body.style.opacity = '0';
-            setTimeout(() => window.location.href = this.getAttribute('href'), 400);
+            setTimeout(() => window.location.href = href, 400);
             return;
         }
         
+        // 阻止 #hash 原生錨點跳動，避免破壞水平滑動版面
+        e.preventDefault();
+
         if (window.innerWidth <= 992 && mobileMenuBtn && mainNav) {
             mobileMenuBtn.classList.remove('open');
             mainNav.classList.remove('open');
@@ -290,7 +307,7 @@ navLinks.forEach(link => {
 
         if (isAnimating) return;
         
-        const indexValue = parseInt(this.getAttribute('data-index'));
+        const indexValue = parseInt(this.getAttribute('data-index'), 10);
         if (!isNaN(indexValue)) {
             navigateTo(indexValue);
         }
@@ -298,7 +315,7 @@ navLinks.forEach(link => {
 });
 
 function navigateTo(targetIndex) {
-    if (isNaN(targetIndex) || targetIndex === currentIndex) return;
+    if (isNaN(targetIndex) || targetIndex === currentIndex || !pages[targetIndex]) return;
     isAnimating = true;
 
     const currentDoc = pages[currentIndex];
@@ -320,7 +337,7 @@ function navigateTo(targetIndex) {
     currentIndex = targetIndex;
     
     const backToTopBtn = document.getElementById('back-to-top');
-    if(backToTopBtn) backToTopBtn.classList.remove('show');
+    if (backToTopBtn) backToTopBtn.classList.remove('show');
     
     setTimeout(() => {
         isAnimating = false;
