@@ -316,33 +316,42 @@ navLinks.forEach(link => {
 
 function navigateTo(targetIndex) {
     if (isNaN(targetIndex) || targetIndex === currentIndex || !pages[targetIndex]) return;
+    if (isAnimating) return;
     isAnimating = true;
 
     const currentDoc = pages[currentIndex];
     const targetDoc = pages[targetIndex];
     const direction = targetIndex > currentIndex ? 'right' : 'left';
     
+    // 更新導覽列 active 狀態
     navLinks.forEach(link => link.classList.remove('active'));
     const activeLink = document.querySelector(`.nav-link[data-index="${targetIndex}"]`);
     if (activeLink) activeLink.classList.add('active');
 
+    // 強制瀏覽器準備動畫起點
     targetDoc.style.transition = 'none';
     targetDoc.className = `page-section ${direction === 'right' ? 'page-hidden-right' : 'page-hidden-left'}`;
-    void targetDoc.offsetWidth; 
-
-    targetDoc.style.transition = 'transform 0.6s cubic-bezier(0.77, 0, 0.175, 1), visibility 0.6s';
-    currentDoc.className = `page-section ${direction === 'right' ? 'page-hidden-left' : 'page-hidden-right'}`;
-    targetDoc.className = 'page-section page-active';
-
-    currentIndex = targetIndex;
     
-    const backToTopBtn = document.getElementById('back-to-top');
-    if (backToTopBtn) backToTopBtn.classList.remove('show');
-    
-    setTimeout(() => {
-        isAnimating = false;
-        currentDoc.scrollTop = 0; 
-    }, 600);
+    // 使用雙重 rAF 確保瀏覽器完成 DOM 渲染再啟動動畫，解決卡頓閃爍
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            targetDoc.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease';
+            currentDoc.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease';
+            
+            currentDoc.className = `page-section ${direction === 'right' ? 'page-hidden-left' : 'page-hidden-right'}`;
+            targetDoc.className = 'page-section page-active';
+            
+            currentIndex = targetIndex;
+            
+            const backToTopBtn = document.getElementById('back-to-top');
+            if (backToTopBtn) backToTopBtn.classList.remove('show');
+            
+            setTimeout(() => {
+                isAnimating = false;
+                currentDoc.scrollTop = 0; 
+            }, 500);
+        });
+    });
 }
 
 function openNewsModal(index, event) {
