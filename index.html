@@ -95,15 +95,15 @@
 
         <nav id="main-nav" aria-label="主導覽列">
             <ul>
-                <li><a href="#home">首頁</a></li>
-                <li><a href="#news">最新公告</a></li>
-                <li><a href="#rules">校規與法規</a></li>
-                <li><a href="#about">關於我們</a></li>
-                <li><a href="#departments">組織團隊</a></li>
-                <li><a href="#history">會史館</a></li>
-                <li><a href="#links">相關連結</a></li>
-                <li><a href="https://sa.chshsga.org/clubs">社團名冊</a></li>
-                <li><a href="#contact">聯絡我們</a></li>
+                <li><a href="#home" class="active" onclick="navigateTo(0); return false;">首頁</a></li>
+                <li><a href="#news" onclick="navigateTo(1); return false;">最新公告</a></li>
+                <li><a href="#rules" onclick="navigateTo(2); return false;">校規與法規</a></li>
+                <li><a href="#about" onclick="navigateTo(3); return false;">關於我們</a></li>
+                <li><a href="#departments" onclick="navigateTo(4); return false;">組織團隊</a></li>
+                <li><a href="#history" onclick="navigateTo(5); return false;">會史館</a></li>
+                <li><a href="#links" onclick="navigateTo(6); return false;">相關連結</a></li>
+                <li><a href="https://sa.chshsga.org/clubs" id="nav-clubs-link">社團名冊</a></li>
+                <li><a href="#contact" onclick="navigateTo(7); return false;">聯絡我們</a></li>
             </ul>
         </nav>
     </header>
@@ -577,5 +577,34 @@
     <!-- 引入解析庫與腳本 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <script src="script.js" defer></script>
+
+    <!-- 導覽列防呆與索引對齊修補腳本 -->
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            // 1. 確保「社團名冊」外部連結不會被 script.js 的 preventDefault 攔截
+            const clubsLink = document.getElementById('nav-clubs-link');
+            if (clubsLink) {
+                clubsLink.addEventListener('click', (e) => {
+                    e.stopImmediatePropagation();
+                }, true);
+            }
+
+            // 2. 修正因為中間插入「社團名冊」導致 navigateTo(7) 時亮燈位置錯位的問題
+            if (typeof window.navigateTo === 'function') {
+                const originalNavigateTo = window.navigateTo;
+                // 只選取站內分頁的導覽連結（排除外部連結）
+                const internalNavLinks = document.querySelectorAll('#main-nav a[href^="#"]');
+                
+                window.navigateTo = function(index) {
+                    originalNavigateTo(index);
+                    // 重新精準校正 .active 狀態
+                    document.querySelectorAll('#main-nav a').forEach(a => a.classList.remove('active'));
+                    if (internalNavLinks[index]) {
+                        internalNavLinks[index].classList.add('active');
+                    }
+                };
+            }
+        });
+    </script>
 </body>
 </html>
