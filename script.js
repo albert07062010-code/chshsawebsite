@@ -219,7 +219,7 @@ function initTermsModal() {
         // 設定 2800 毫秒 (2.8秒) 延遲，等預設的白色 Loading 完全消失後再彈出
         setTimeout(() => {
             termsModal.classList.add("active");
-        }, 2800);
+        }, 500);
     }
 
     // 點擊「同意」
