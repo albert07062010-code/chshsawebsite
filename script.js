@@ -407,10 +407,11 @@ function toggleRule(headerElement) {
 window.addEventListener('load', () => {
     const preloader = document.getElementById('preloader');
     if (preloader) {
+        
         setTimeout(() => {
             preloader.classList.add('loaded');
-            setTimeout(() => preloader.remove(), 600); 
-        }, 2000);
+            setTimeout(() => preloader.remove(), 600);
+        }, 200);
     }
 });
 
